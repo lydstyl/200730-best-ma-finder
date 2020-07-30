@@ -1,10 +1,10 @@
 const csv = require('csv-parser')
 const fs = require('fs')
 
-//let data = null
+let data = null
 
 const getCsvData = async () => {
-  const data = await (() => {
+  data = await (() => {
     return new Promise((resolve, rejet) => {
       const results = []
 
@@ -20,21 +20,19 @@ const getCsvData = async () => {
       }
     })
   })()
-
-  return data
 }
 
 const findBestMa = async () => {
-  let data = await getCsvData()
+  await getCsvData()
 
-  data = removeTitle(data)
+  removeTitlesAndChangeDataKeys()
 
-  data = addDate(data)
+  addJsDateToData()
 
   console.log('findBestMa -> data', data[0])
 }
 
-const removeTitle = (data) => {
+const removeTitlesAndChangeDataKeys = () => {
   const titles = data.shift()
 
   return data.map((d) => {
@@ -47,7 +45,7 @@ const removeTitle = (data) => {
   })
 }
 
-const addDate = (data) => {
+const addJsDateToData = () => {
   return data.map((d) => ({ ...d, jsDate: new Date(d.Date) }))
 }
 
